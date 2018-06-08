@@ -1,22 +1,23 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 type Socket struct {
-	Group  int64  `json:"group"`
-	Attr   string `json:"attr"`
-	Colour string `json:"sColour"`
+	Group  int64       `json:"group"`
+	Attr   interface{} `json:"attr"`
+	Colour string      `json:"sColour"`
 }
 
 type AdditionaItemProperty struct {
 	Name        string        `json:"name"`
 	Values      []interface{} `json:"values"`
 	DisplayMode int64         `json:"displayMode"`
-	Progress    int64         `json:"progress"`
+	Progress    float64       `json:"progress"`
 	Type        int64         `json:"type"`
 }
 
@@ -30,7 +31,7 @@ type ItemCategory struct {
 }
 
 type Item struct {
-	Verified              string                  `json:"verified"`
+	Verified              bool                    `json:"verified"`
 	W                     int64                   `json:"w"`
 	H                     int64                   `json:"h"`
 	ID                    string                  `json:"id"`
@@ -47,7 +48,8 @@ type Item struct {
 	Requirements          []Property              `json:"requirements"`
 	NextLevelRequirements []Property              `json:"nextLevelRequirements"`
 	SecDescrText          string                  `json:"secDescrText"`
-	ExplicitMods          string                  `json:"explicitMods"`
+	ExplicitMods          []string                `json:"explicitMods"`
+	FlavourText           []string                `json:"flavourText"`
 	FrameType             int64                   `json:"frameType"`
 	Category              ItemCategory            `json:"category"`
 	X                     int64                   `json:"x"`
@@ -74,9 +76,19 @@ func main() {
 	fmt.Println("test")
 	resp, err := http.Get("http://api.pathofexile.com/public-stash-tabs/?id=202645757-210123687-198063514-227613078-213939523")
 	if err != nil {
-		fmt.Println("nope")
+		fmt.Println(err.Error())
+		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(body))
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	var msg PoeResponse
+	err = json.Unmarshal(body, &msg)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
