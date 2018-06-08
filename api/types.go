@@ -18,6 +18,8 @@ type Property struct {
 	Name        string          `json:"name"`
 	Values      [][]interface{} `json:"values"`
 	DisplayMode int64           `json:"displayMode"`
+	Type        int64           `json:"type"`
+	Progress    int64           `json:"progress"`
 }
 type ItemCategory struct {
 	Info map[string][]string
