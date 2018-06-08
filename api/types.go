@@ -83,7 +83,7 @@ type Stash struct {
 	Public            bool   `json:"public"`
 }
 
-type PublicStashes struct {
+type PublicStashesResponse struct {
 	NextChangeID string  `json:"next_change_id"`
 	Stashes      []Stash `json:"stashes"`
 }

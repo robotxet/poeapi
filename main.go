@@ -15,7 +15,7 @@ func main() {
 		return
 	}
 	defer resp.Body.Close()
-	var msg api.PublicStashes
+	var msg api.PublicStashesResponse
 	err = json.NewDecoder(resp.Body).Decode(&msg)
 	if err != nil {
 		fmt.Println(err.Error())
