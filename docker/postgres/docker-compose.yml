@@ -1,0 +1,9 @@
+version: '2'
+services:
+        postgres:
+                container_name: some-postgres
+                image: launcher.gcr.io/google/postgresql10
+                environment:
+                        "POSTGRES_PASSWORD": "1q2w3e"
+                ports:
+                        - '5432:5432'
