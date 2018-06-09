@@ -1,6 +1,6 @@
-#Poe fetcher
+# Poe fetcher
 
-##usage
+## usage
 
 ./poeapi --config=path_to_config
 
