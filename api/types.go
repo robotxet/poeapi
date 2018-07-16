@@ -1,19 +1,33 @@
 package api
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+//StringBoolean type
+type StringBoolean string
+
 //Socket struct for item sockets
 type Socket struct {
-	Group  int64       `json:"group"`
-	Attr   interface{} `json:"attr"`
-	Colour string      `json:"sColour"`
+	Group  int64         `json:"group"`
+	Attr   StringBoolean `json:"attr"`
+	Colour string        `json:"sColour"`
+}
+
+//PropertyValues is values of properties
+type PropertyValues struct {
+	StrVal string
+	IntVal int64
 }
 
 //Property of item
 type Property struct {
-	Name        string          `json:"name"`
-	Values      [][]interface{} `json:"values"`
-	DisplayMode int64           `json:"displayMode"`
-	Type        int64           `json:"type"`
-	Progress    float64         `json:"progress"`
+	Name        string           `json:"name"`
+	Values      []PropertyValues `json:"values"`
+	DisplayMode int64            `json:"displayMode"`
+	Type        int64            `json:"type"`
+	Progress    float64          `json:"progress"`
 }
 
 //ItemCategory struct
@@ -85,4 +99,24 @@ type Stash struct {
 type PublicStashesResponse struct {
 	NextChangeID string  `json:"next_change_id"`
 	Stashes      []Stash `json:"stashes"`
+}
+
+//UnmarshalJSON for StringBoolan
+//That sucks, but Attr can be false for abyss jewels
+func (s *StringBoolean) UnmarshalJSON(buf []byte) error {
+	*s = StringBoolean(buf)
+	return nil
+}
+
+//UnmarshalJSON for PropertyValues
+func (p *PropertyValues) UnmarshalJSON(buf []byte) error {
+	tmp := []interface{}{&p.StrVal, &p.IntVal}
+	wantLen := len(tmp)
+	if err := json.Unmarshal(buf, &tmp); err != nil {
+		return err
+	}
+	if g, e := len(tmp), wantLen; g != e {
+		return fmt.Errorf("wrong number of fields in Notification: %d != %d", g, e)
+	}
+	return nil
 }
