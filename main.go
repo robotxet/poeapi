@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"poeapi/api"
+	"github.com/robotxet/poeapi/api"
 )
 
 func main() {
